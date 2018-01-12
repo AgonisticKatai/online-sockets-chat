@@ -6,6 +6,7 @@ const InputForm = props => {
     const newMessage = {
       message: this.messageInput.value
     };
+    props.sendMessage(newMessage);
     this.messageInput.value = "";
   };
 
