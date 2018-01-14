@@ -4,7 +4,7 @@ import io from "socket.io-client";
 
 import InputForm from "components/InputForm/Inputform";
 import MessagePanel from "components/MessagePanel/MessagePanel";
-import sendMessage from "services/eventServices";
+import { sendMessage, loadMessages } from "services/eventServices";
 
 import "./App.css";
 
@@ -13,28 +13,41 @@ const { REACT_APP_API_SERVER } = process.env;
 class App extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      socket: null,
+      messages: []
+    };
   }
 
   componentWillMount() {
-    // this.initSocket();
+    this.initSocket();
+  }
+
+  componentDidMount() {
+    loadMessages(this.state.socket);
   }
 
   handleSendMessage = message => {
-    console.log("send message...");
+    const newMessage = {
+      message: message,
+      socket: this.state.socket.id
+    };
+    sendMessage(newMessage, this.state.socket);
   };
 
   initSocket = () => {
     const socket = io(REACT_APP_API_SERVER);
-    socket.on("connect", e => {
-      console.log("connect", e);
+    socket.on("connect", () => {
+      console.log("connected");
     });
-    socket.on("event", e => {
-      console.log("event", e);
+    socket.on("messages", messages => {
+      this.setState({ messages });
     });
-    socket.on("disconnect", e => {
-      console.log("disconnect", e);
+    socket.on("new-message", message => {
+      const messages = [...this.state.messages, message]
+      this.setState({ messages });
     });
-    console.log(socket);
+    this.setState({ socket });
   };
 
   render() {
@@ -45,7 +58,7 @@ class App extends Component {
         </header>
         <div className="container-fluid">
           <InputForm sendMessage={this.handleSendMessage} />
-          <MessagePanel />
+          <MessagePanel messages={this.state.messages} />
         </div>
       </div>
     );

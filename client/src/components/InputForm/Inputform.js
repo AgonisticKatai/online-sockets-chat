@@ -3,10 +3,8 @@ import React from "react";
 const InputForm = props => {
   const handleSubmit = e => {
     e.preventDefault();
-    const newMessage = {
-      message: this.messageInput.value
-    };
-    props.sendMessage(newMessage);
+    const message = this.messageInput.value;
+    props.sendMessage(message);
     this.messageInput.value = "";
   };
 
