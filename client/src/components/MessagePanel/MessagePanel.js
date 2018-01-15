@@ -6,7 +6,7 @@ const MessagePanel = props => {
       <div key={index} className="d-flex justify-content-center">
         <div className="list-group">
           <div className="d-flex w-100 justify-content-between">
-            <p className="mb-1">message: {message.message}</p>
+            <p className="mb-1"><strong>{message.user}</strong>: {message.message}</p>
           </div>
         </div>
       </div>
