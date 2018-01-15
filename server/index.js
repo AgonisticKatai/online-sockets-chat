@@ -32,4 +32,4 @@ io.on("connection", socket => {
 
 http.listen(PORT);
 
-console.log("Listening in this PORT... : " + PORT);
+console.log(`Listennig on port ${PORT}`);
