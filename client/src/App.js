@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 
 import io from "socket.io-client";
 
@@ -42,20 +43,14 @@ class App extends Component {
     sendMessage(newMessage, this.state.socket);
   };
 
-  renderLogin = () => {
-    if(this.state.user) {
-      return (
-        <div>
-          <MessagePanel messages={this.state.messages} />
-          <InputForm sendMessage={this.handleSendMessage} />
-        </div>
-      )
-    }
-    return (
-      <LoginForm login={this.handleLogin} />
-    )
-  }
-
+  renderLogin = () => (
+    !this.state.user ?
+    <LoginForm login={this.handleLogin} /> :
+    <div>
+      <MessagePanel messages={this.state.messages} />
+      <InputForm sendMessage={this.handleSendMessage} />
+    </div>
+  )
 
   initSocket = () => {
     const socket = io(REACT_APP_API_SERVER);
@@ -78,9 +73,7 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title text-center">Online Sockets Chat</h1>
         </header>
-        <div className="container-fluid">
-          {this.renderLogin()}
-        </div>
+        <div className="container-fluid">{this.renderLogin()}</div>
       </div>
     );
   }
